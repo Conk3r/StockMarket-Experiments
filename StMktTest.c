@@ -9,6 +9,7 @@ int main(){
 
 float startCapital = 10000;
 int count = 0;	
+int dailyData = 0;			//Switch that activates Data Output for every day
 
 /*Value of the Siemens Stock from 28.03.13 to the end of April*/
 
@@ -28,14 +29,16 @@ for(int k = 0; k < 21; k++)
 	pointer->value[k] = siemensValue[k];
 }
 
-
-
+for(int k = 0; k < 201; k++)
+{
+printf("%d#\n",k);
 for(int today = 0; today < 21; today++)
 	{
-	printf("%d# DAY\n",today+1); 
+	if(dailyData)
+		printf("%d# DAY\n",today+1); 
 	if(today-1 >= 0)
 		{
-		if( myStock.value[today-1] - myStock.value[today-2] > myStock.value[today-1]/20 )
+		if( myStock.value[today-1] - myStock.value[today-2] > myStock.value[today-1]/k )
 			{
 			invest(pointer, today);
 			count = 0;
@@ -47,13 +50,14 @@ for(int today = 0; today < 21; today++)
 			}
 		} 
 	memory[today] = totalProfit(pointer, today);
+if(dailyData){
 
-printf("amount: %d \t capital: %.2f $ \t ", pointer->amount, pointer->capital );
-	if(today >= 1 )
-		printf("total: %.2f $\t difference: %.2f\n\n",pointer->capital + pointer->amount * pointer->value[today],memory[today] -memory[today-1]);
-	else
-		printf("\n\n");
-
+			printf("amount: %d \t capital: %.2f $ \t ", pointer->amount, pointer->capital );
+			if(today >= 1 )
+				printf("total: %.2f $\t difference: %.2f\n\n",pointer->capital + pointer->amount * 					pointer->value[today],memory[today] -memory[today-1]);
+			else
+			printf("\n\n");
+			}
 	}
 	
 
@@ -64,6 +68,7 @@ printf("amount: %d \t capital: %.2f $ \t ", pointer->amount, pointer->capital );
 
 
 printf("You made profit of %.2f $ \n",myStock.capital + myStock.amount * myStock.value[20] -10000 );
+}
 }
 
 //printDailyresults(
@@ -88,7 +93,8 @@ int totalProfit(struct share *stock, int day)
 void sell(struct share *stock, int day){
 		stock->capital =  stock->amount * stock->value[day] + stock->capital;
 		stock->amount = 0;
-		printf("SELL\n");
+		/*if(dailyData)		
+			printf("SELL\n")*/;
 }
 void invest(struct share *stock, int day){
 	for(int i = 0; (*stock).capital > 0; i++)
@@ -100,7 +106,8 @@ void invest(struct share *stock, int day){
 		}
 		stock->amount--;
 		stock->capital= stock->capital + stock->value[day];
-		printf("INVEST \n");
+		/*if(dailyData)
+			printf("INVEST \n")*/;
 }
 
 
